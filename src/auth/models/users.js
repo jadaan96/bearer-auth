@@ -14,7 +14,22 @@ const userSchema = (sequelize, DataTypes) => {
         return jwt.sign({ username: this.username }, SECRET);
       },
     },
-  });
+    role: {
+      type: DataTypes.ENUM('User', 'writer', 'Editor','admin'),
+      defaultValue: 'User'
+  },
+  Capabilities: {
+      type: DataTypes.VIRTUAL,
+      get() {
+          const acl = {
+            User: ['read'],
+            writer: ['read', 'post'],
+            Editor: ['read', 'post','update'],
+            admin: ['read', 'post', 'update','delete']
+          }
+          return acl[this.role]
+      }
+  }});
 
   model.beforeCreate(async (user) => {
     let hashedPass = await bcrypt.hash(user.password, 10);

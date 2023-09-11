@@ -10,11 +10,17 @@ const {
   handleSignup,
   handleGetUsers,
   handleSecret,
+  handleGetlist,
+  handlePostlist,
+  handleUpdatelist,
 } = require('./handlers.js');
 
 authRouter.post('/signup', handleSignup);
 authRouter.post('/signin', basicAuth, handleSignin);
-authRouter.get('/users', bearerAuth, handleGetUsers);
+authRouter.get('/todo', handleGetlist);
+authRouter.post('/todo', handlePostlist);
+authRouter.put('/todo', handleUpdatelist);
+
 authRouter.get('/secret', bearerAuth, handleSecret);
 
 module.exports = authRouter;
